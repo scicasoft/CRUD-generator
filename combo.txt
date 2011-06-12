@@ -1,0 +1,66 @@
+var newCombo = new Ext.form.ComboBox({
+						fieldLabel 					: dataStore.fieldInfo[i].fieldLabel,
+						allowBlank 					: false,
+						hiddenName 					: dataStore.fieldInfo[i].name,
+						anchor 					: dataStore.fieldInfo[i].anchor,
+						store 					: new Ext.data.SimpleStore({fields:['value', 'name'], data:aComboValues}),
+						displayField 				: 'name',
+		    			valueField 					: 'value',
+						disableKeyFilter 				: true,
+						mode 						: 'local',
+						triggerAction				: dataStore.fieldInfo[i].trigger
+	 });
+
+
+famillesDataStore = new Ext.data.Store({
+				id : 'famillesDataStore',
+				proxy : new Ext.data.HttpProxy({
+							url : 'index/grille',
+							method : 'POST'
+
+						}),
+				baseParams : {
+					gAction : "gListeFamille"
+				},
+				reader : new Ext.data.JsonReader({
+							root : 'results',
+							id : 'id'
+						}, [{
+									name : 'id',
+									type : 'int',
+									mapping : 'id'
+								}, {
+									name : 'Libelle',
+									type : 'string',
+									mapping : 'Libelle'
+								}
+
+						]),
+
+				sortInfo : {
+					field : 'Libelle',
+					direction : "ASC"
+				}
+
+			});
+var newCombo = new Ext.form.ComboBox({
+                             store : famillesDataStore,
+							typeAhead : true,
+							triggerAction : 'all',
+							mode : 'remote',
+							displayField : 'Libelle',
+							listeners : {
+								select : {
+									fn : function(e, rec) {
+										var sm = articlesListGrid
+												.getSelectionModel()
+												.getSelected();
+										sm.set('famille', rec.id);
+									}
+								}
+							},
+
+							listClass : 'x-combo-list-small'// ,
+
+						})
+			}
